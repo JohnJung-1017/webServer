@@ -35,6 +35,10 @@ def detail(request, question_id):
     pybo 내용 출력
     """
     question = get_object_or_404(Question, pk=question_id)
+    # 조회수 추적 기능 추가
+    question.view_count += 1
+    question.save()
+
     sort_order = request.GET.get('sort', 'latest')
     page = request.GET.get('page', '1')
 
