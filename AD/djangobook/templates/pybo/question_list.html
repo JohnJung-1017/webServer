@@ -2,6 +2,13 @@
 {% load pybo_filter %}
 {% block content %}
 <div class="container my-3">
+    <!-- 검색 폼 추가 -->
+    <form method="get" action="{% url 'pybo:index' %}" class="form-inline mb-3">
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Search..." class="form-control mr-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <!-- 검색 폼 -->
+    
     <table class="table">
         <thead>
         <tr class="text-center thead-dark">
