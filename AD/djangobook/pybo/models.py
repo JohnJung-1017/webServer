@@ -9,6 +9,7 @@ class Question(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     voter = models.ManyToManyField(User, related_name='voter_question')
+    vote_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.subject
@@ -21,7 +22,7 @@ class Answer(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     voter = models.ManyToManyField(User, related_name='voter_answer')
-
+    vote_count = models.IntegerField(default=0)
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)

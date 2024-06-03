@@ -12,10 +12,12 @@
     {% endif %}
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
     <div class="row my-3">
-        <div class="col-1"> <!-- 추천영역 -->
-            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{question.voter.count}}</div>
-            <a href="#" data-uri="{% url 'pybo:vote_question' question.id  %}"
+        <div class="col-1"> <!-- 추천영역: 비추천 추가 -->
+            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{question.vote_count}}</div>
+            <a href="#" data-uri="{% url 'pybo:vote_up_question' question.id  %}"
                class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
+            <a href="#" data-uri="{% url 'pybo:vote_down_question' question.id %}"
+               class="unrecommend btn btn-sm btn-danger btn-block my-1">비추천</a>
         </div>
         <div class="col-11"> <!-- 질문영역 -->
             <div class="card">
@@ -74,10 +76,12 @@
     <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
     {% for answer in question.answer_set.all %}
     <div class="row my-3">
-        <div class="col-1">  <!-- 추천영역 -->
-            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{answer.voter.count}}</div>
-            <a href="#" data-uri="{% url 'pybo:vote_answer' answer.id  %}"
+        <div class="col-1">  <!-- 추천영역: 비추천 추가 -->
+            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{answer.vote_count}}</div>
+            <a href="#" data-uri="{% url 'pybo:vote_up_answer' answer.id  %}"
                 class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
+            <a href="#" data-uri="{% url 'pybo:vote_down_answer' answer.id %}"
+                class="unrecommend btn btn-sm btn-danger btn-block my-1">비추천</a>
         </div>
         <div class="col-11">  <!-- 답변영역 -->
             <div class="card">
@@ -162,6 +166,11 @@ $(document).ready(function(){
     });
     $(".recommend").on('click', function() {
         if(confirm("정말로 추천하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+    $(".unrecommend").on('click', function() {
+        if(confirm("정말로 비추천하시겠습니까?")) {
             location.href = $(this).data('uri');
         }
     });
