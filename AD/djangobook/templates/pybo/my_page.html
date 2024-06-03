@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2>My Page</h2>
+    
+    <h3>My Questions</h3>
+    {% if questions %}
+    <ul>
+        {% for question in questions %}
+        <li>
+            <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a> ({{ question.create_date }})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>등록한 질문이 없습니다.</p>
+    {% endif %}
+    
+    <h3>My Answers</h3>
+    {% if answers %}
+    <ul>
+        {% for answer in answers %}
+        <li>
+            <a href="{% url 'pybo:detail' answer.question.id %}">{{ answer.content|truncatewords:20 }}</a> ({{ answer.create_date }})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>등록한 답변이 없습니다.</p>
+    {% endif %}
+
+    <h3>My Comments</h3>
+    {% if comments %}
+    <ul>
+        {% for comment in comments %}
+        <li>
+            {% if comment.content_object %}
+                <a href="{% url 'pybo:detail' comment.content_object.id %}">{{ comment.content|truncatewords:20 }}</a> ({{ comment.create_date }})
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>등록한 댓글이 없습니다.</p>
+    {% endif %}
+</div>
+{% endblock %}
