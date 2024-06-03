@@ -35,5 +35,18 @@ def detail(request, question_id):
     pybo 내용 출력
     """
     question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
+    sort_order = request.GET.get('sort', 'latest')
+    page = request.GET.get('page', '1')
+
+    # 답변 정렬기능 추가
+    if sort_order == 'recommend':
+        answer_list = question.answer_set.order_by('-vote_count', '-create_date')
+    else:  # 기본 정렬은 최신순
+        answer_list = question.answer_set.order_by('-create_date')
+
+    # 답변 페이징처리 기능 추가
+    paginator = Paginator(answer_list, 5)  # 페이지당 5개씩 보여주기
+    answers = paginator.page(page)
+
+    context = {'question': question, 'answers' : answers, 'sort_order' : sort_order,}
     return render(request, 'pybo/question_detail.html', context)

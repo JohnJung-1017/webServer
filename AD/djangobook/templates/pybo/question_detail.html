@@ -17,7 +17,7 @@
             <a href="#" data-uri="{% url 'pybo:vote_up_question' question.id  %}"
                class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
             <a href="#" data-uri="{% url 'pybo:vote_down_question' question.id %}"
-               class="unrecommend btn btn-sm btn-danger btn-block my-1">비추천</a>
+               class="unrecommend btn btn-sm btn-danger btn-block my-1">비추</a>
         </div>
         <div class="col-11"> <!-- 질문영역 -->
             <div class="card">
@@ -74,14 +74,14 @@
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
-    {% for answer in question.answer_set.all %}
+    {% for answer in answers %}
     <div class="row my-3">
         <div class="col-1">  <!-- 추천영역: 비추천 추가 -->
             <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{answer.vote_count}}</div>
             <a href="#" data-uri="{% url 'pybo:vote_up_answer' answer.id  %}"
                 class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
             <a href="#" data-uri="{% url 'pybo:vote_down_answer' answer.id %}"
-                class="unrecommend btn btn-sm btn-danger btn-block my-1">비추천</a>
+                class="unrecommend btn btn-sm btn-danger btn-block my-1">비추</a>
         </div>
         <div class="col-11">  <!-- 답변영역 -->
             <div class="card">
@@ -136,6 +136,53 @@
         </div>
     </div>
     {% endfor %}
+
+    <!-- 답변 정렬 시작 -->
+    <div class="d-flex justify-content-end">
+        <a href="?sort=latest" class="btn btn-sm {% if sort_order == 'latest' %}btn-primary{% else %}btn-outline-primary{% endif %}">최신순</a>
+        <a href="?sort=recommend" class="btn btn-sm ml-2 {% if sort_order == 'recommend' %}btn-primary{% else %}btn-outline-primary{% endif %}">추천순</a>
+    </div>
+    <!-- 답변 정렬 끝 -->
+    
+    <!-- 답변 페이징 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전 페이지 -->
+        {% if answers.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ answers.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지 번호 -->
+        <li class="pagination justify-content-center">
+            {% for page_number in answers.paginator.page_range %}
+                {% if page_number == answers.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </li>
+        <!-- 다음 페이지 -->
+        {% if answers.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ answers.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 답변 페이징 끝 -->
+
     <form action="{% url 'pybo:answer_create' question.id %}" method="post" class="my-3">
         {% csrf_token %}
         {% if form.errors %}
