@@ -28,9 +28,7 @@
                 {{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
             </td>
             <td>
-                {% if question.voter.all.count > 0 %}
                 <span class="badge badge-warning px-2 py-1">{{ question.vote_count }}</span>
-                {% endif %}
             </td>
             <td class="text-left">
                 <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
@@ -49,6 +47,7 @@
         {% endif %}
         </tbody>
     </table>
+
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
@@ -87,6 +86,7 @@
         {% endif %}
     </ul>
     <!-- 페이징처리 끝 -->
+    
     <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
 </div>
 {% endblock %}
